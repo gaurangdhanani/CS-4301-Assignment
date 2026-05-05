@@ -8,20 +8,20 @@ from qiskit_aer import AerSimulator
 def diffuser(n: int) -> QuantumCircuit:
     """Standard Grover diffuser (inversion about the mean) on n qubits.
 
-    Implements: H^⊗n · X^⊗n · MCZ · X^⊗n · H^⊗n.
-
-    Returns a QuantumCircuit. Convert to a Gate via .to_gate(label="diffuser")
-    when appending to a larger circuit.
+    Implements 2|s⟩⟨s| − I.  The textbook circuit H^n X^n MCZ X^n H^n actually
+    realises I − 2|s⟩⟨s| (i.e. -D), so we add a -1 global phase to flip the sign.
+    The change is invisible to Grover search (global phase) but essential for
+    quantum counting, where controlled-G turns the global phase into a real one.
     """
     if n < 1:
         raise ValueError(f"diffuser needs at least 1 qubit, got {n}")
 
     qc = QuantumCircuit(n, name="diffuser")
+    qc.global_phase = math.pi   # <-- this is the fix
 
     qc.h(range(n))
     qc.x(range(n))
 
-    # Multi-controlled Z: phase flip iff every qubit is |1⟩.
     if n == 1:
         qc.z(0)
     else:
