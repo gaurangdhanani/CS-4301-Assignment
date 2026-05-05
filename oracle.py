@@ -53,3 +53,42 @@ def mark_clause(
     # 6. Uncompute the X gates on the variable qubits so they're returned unchanged.
     for q in flip_targets:
         qc.x(q)
+
+def build_oracle(n: int, clauses: List[Clause]) -> QuantumCircuit:
+    """Construct the phase-flip oracle for a 3-SAT instance.
+
+    Qubit layout (on the returned circuit):
+      qubits 0 .. n-1         : variable qubits
+      qubits n .. n+m-1       : clause ancillas (one per clause), clean on entry/exit
+      qubit  n+m              : phase-kickback target, clean on entry/exit
+
+    Returns a QuantumCircuit. Convert to a gate via .to_gate(label="oracle")
+    when appending into a larger circuit.
+    """
+    m = len(clauses)
+    var_qubits = list(range(n))
+    clause_ancillas = list(range(n, n + m))
+    target = n + m
+
+    qc = QuantumCircuit(n + m + 1, name="oracle")
+
+    # 1. Initialize target to |−⟩.
+    qc.x(target)
+    qc.h(target)
+
+    # 2. Compute clause ancillas.
+    for i, clause in enumerate(clauses):
+        mark_clause(qc, clause, var_qubits, clause_ancillas[i])
+
+    # 3. Phase kickback: |−⟩ on the target picks up a −1 iff all clause ancillas are 1.
+    qc.mcx(clause_ancillas, target)
+
+    # 4. Uncompute clause ancillas. Reverse order is the standard pattern.
+    for i in reversed(range(m)):
+        mark_clause(qc, clauses[i], var_qubits, clause_ancillas[i])
+
+    # 5. Restore the target to |0⟩.
+    qc.h(target)
+    qc.x(target)
+
+    return qc
