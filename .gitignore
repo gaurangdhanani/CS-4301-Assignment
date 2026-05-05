@@ -1,0 +1,67 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ---- Virtual environments ----
+.venv/
+venv/
+env/
+ENV/
+
+# ---- Distribution / packaging ----
+build/
+dist/
+*.egg-info/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ---- Test / coverage artifacts ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ---- Type checkers / linters ----
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.pytype/
+
+# ---- Jupyter / IPython ----
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ---- Editors / IDEs ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Qiskit / quantum scratch ----
+# Saved circuit diagrams, transpiled QASM dumps, plot images, etc.
+*.qasm
+*.qpy
+circuit_*.png
+circuit_*.svg
+
+# ---- Project-specific ----
+# Local scratch files and ad-hoc test inputs.
+scratch/
+*.log
+out/
+results/
+
+# Submission archive (regenerate when submitting; don't commit it)
+*.zip
