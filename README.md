@@ -92,31 +92,42 @@ ones — `001`, `011`, `101`, `110`, `111`):
 
 ## Testing
 
-A regression suite runs `main.py` against several inputs and verifies
-each result classically:
+The project ships with a single regression suite that contains 15 test cases inlined as Python strings. The harness writes each formula to a temp file, runs `main.py` against it, and verifies the result against a brute-force classical counter.
 
-​```bash
-python tests/run_tests.py
-​```
+Run all tests with one command:
 
-Individual building-block tests:
+```bash
+python tests/run_all.py
+```
 
-​```bash
+Each test prints a one-line summary; the script exits with status 0 if every test passes, 1 otherwise. Coverage includes:
+
+- single-variable cases (n=1) for both polarities
+- the `-0` parsing edge case
+- unsatisfiable formulas (n=1 and n=2)
+- tautologies (single-clause and multi-clause)
+- clauses with repeated and self-cancelling literals
+- forced unique solutions (n=4, M=1)
+- sparse formulas with many solutions (high M, where Grover overshoots)
+- the spec example and several random n=3 / n=4 instances
+
+Total runtime is roughly 5–10 minutes on a laptop; the n=4 cases dominate.
+
+Individual unit tests for the building blocks are also available:
+
+```bash
 python tests/test_mark_clause.py
 python tests/test_oracle.py
 python tests/test_diffuser.py
 python tests/test_grover.py
 python tests/test_counting.py
-​```
-
-The full regression suite takes 1–2 minutes on a laptop; the n=4 test
-dominates the runtime.
+```
 
 ## Versions tested
 
-- Python: <FILL IN>
-- Qiskit: <FILL IN>
-- qiskit-aer: <FILL IN>
+- Python: 3.13.12
+- Qiskit: 2.4.1
+- qiskit-aer: 0.17.2
 
 Check yours with:
 
