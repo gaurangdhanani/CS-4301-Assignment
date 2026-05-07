@@ -1,3 +1,9 @@
+# Information
+
+Name - Dhanani, Gaurang Rameshbhai
+Class - 4301.001
+NetID - GXD220027
+
 # Quantum 3-SAT
 
 Find a satisfying assignment and estimate the number of solutions for a
